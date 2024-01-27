@@ -8,7 +8,7 @@ import {
     Needs,
 } from "./Ingredients";
 import gsap from "gsap";
-import { Customers } from "./Customers";
+import { Character, Characters } from "./Characters";
 
 export class CustomerPane extends Container {
     private background: Sprite;
@@ -31,7 +31,7 @@ export class CustomerPane extends Container {
         this.background.setParent(this);
 
         this.customer = new Customer();
-        this.customer.needs = Customers[0].needs;
+        this.customer.setCharacter(Characters[0]);
         this.customer.setParent(this);
 
         this.thoughtBubble = new Container();
@@ -85,9 +85,8 @@ export class CustomerPane extends Container {
             })
             .add(() => {
                 this.currentCustomer =
-                    (this.currentCustomer + 1) % Customers.length;
-                this.customer.needs = Customers[this.currentCustomer].needs;
-
+                    (this.currentCustomer + 1) % Characters.length;
+                this.customer.setCharacter(Characters[this.currentCustomer]);
                 this.thought.text = this.customer.needs
                     .map((n) => Needs[n].description)
                     .join("\n");
@@ -140,25 +139,38 @@ export class CustomerPane extends Container {
 
 class Customer extends Container {
     public needs: NeedName[] = [];
+    private sprite: Sprite;
     constructor() {
         super();
 
-        const torso = new Sprite(Texture.WHITE);
-        torso.name = "torso";
-        torso.setParent(this);
-        torso.anchor.set(0.5, 1);
-        torso.tint = "#2e2e2e";
-        torso.width = 250;
-        torso.height = 150;
+        this.sprite = new Sprite();
+        this.sprite.setParent(this);
+        this.sprite.anchor.set(0.5, 1);
 
-        const head = new Sprite(Texture.WHITE);
-        head.name = "head";
-        head.setParent(this);
-        head.width = 100;
-        head.height = 130;
-        head.tint = torso.tint;
-        head.anchor.set(0.5, 1);
-        head.y = -torso.height;
+        // const torso = new Sprite(Texture.WHITE);
+        // torso.name = "torso";
+        // torso.setParent(this);
+        // torso.anchor.set(0.5, 1);
+        // torso.tint = "#2e2e2e";
+        // torso.width = 250;
+        // torso.height = 150;
+
+        // const head = new Sprite(Texture.WHITE);
+        // head.name = "head";
+        // head.setParent(this);
+        // head.width = 100;
+        // head.height = 130;
+        // head.tint = torso.tint;
+        // head.anchor.set(0.5, 1);
+        // head.y = -torso.height;
+    }
+
+    setCharacter(character: Character) {
+        this.sprite.texture = character.texture;
+        this.sprite.width = 300;
+        this.sprite.height = 300;
+        this.sprite.scale.set(this.sprite.scale.x);
+        this.needs = character.needs;
     }
 
     givePotion(ingredients: IngredientInfo[]): boolean {

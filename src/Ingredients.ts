@@ -1,73 +1,87 @@
 import gsap from "gsap";
+import bananaPng from "./assets/fruits/banana.png";
+import blueberryPng from "./assets/fruits/black_cherry.png";
+import lemonPng from "./assets/fruits/lemon.png";
+import limePng from "./assets/fruits/lime.png";
+import orangePng from "./assets/fruits/orange.png";
+import chocolatePng from "./assets/chocolate.png";
+import { Texture } from "pixi.js";
 
 export const Ingredients = {
     lime: {
+        texture: Texture.from(limePng),
         color: "#00ff00",
         description: "Lime",
         satisfies: ["sour", "green"],
     },
     blueberry: {
+        texture: Texture.from(blueberryPng),
         color: "#4327e4",
         description: "Blueberry",
         satisfies: ["sweet", "sour", "blue"],
     },
     lemon: {
+        texture: Texture.from(lemonPng),
         color: "#e1ec77",
         description: "Lemon",
         satisfies: ["sour", "yellow"],
     },
     chocolate: {
+        texture: Texture.from(chocolatePng),
         color: "#614229",
         description: "Chocolate",
         satisfies: ["sweet", "cosy"],
     },
     orange: {
+        texture: Texture.from(orangePng),
         color: "#ffae00",
         description: "Orange",
         satisfies: ["sweet", "orange"],
     },
     banana: {
+        texture: Texture.from(bananaPng),
         color: "#eeff00",
         description: "Banana",
         satisfies: ["sweet", "yellow"],
     },
-    cuddle: {
-        color: "#d63975",
-        description: "Cuddle",
-        satisfies: ["cosy", "pink"],
-    },
-    lake: {
-        color: "#00e1ff",
-        description: "Lake",
-        satisfies: ["blue", "shiny", "cold"],
-    },
-    goth: {
-        color: "#1e1e1e",
-        description: "Goth",
-        satisfies: ["black", "pink"],
-    },
-    bubble: {
-        color: "#ffffff",
-        description: "Bubble",
-        satisfies: ["fizz"],
-    },
-    pepper: {
-        color: "#ff00ff",
-        description: "Pepper",
-        satisfies: ["hot", "red"],
-    },
-    liquorice: {
-        color: "#000000",
-        description: "Liquorice",
-        satisfies: ["black", "sweet"],
-    },
-    glitter: {
-        color: "#b4e4ec",
-        description: "Glitter",
-        satisfies: ["shiny", "fizz"],
-    },
+    // cuddle: {
+    //     color: "#d63975",
+    //     description: "Cuddle",
+    //     satisfies: ["cosy", "pink"],
+    // },
+    // lake: {
+    //     color: "#00e1ff",
+    //     description: "Lake",
+    //     satisfies: ["blue", "shiny", "cold"],
+    // },
+    // goth: {
+    //     color: "#1e1e1e",
+    //     description: "Goth",
+    //     satisfies: ["black", "pink"],
+    // },
+    // bubble: {
+    //     color: "#ffffff",
+    //     description: "Bubble",
+    //     satisfies: ["fizz"],
+    // },
+    // pepper: {
+    //     color: "#ff00ff",
+    //     description: "Pepper",
+    //     satisfies: ["hot", "red"],
+    // },
+    // liquorice: {
+    //     color: "#000000",
+    //     description: "Liquorice",
+    //     satisfies: ["black", "sweet"],
+    // },
+    // glitter: {
+    //     color: "#b4e4ec",
+    //     description: "Glitter",
+    //     satisfies: ["shiny", "fizz"],
+    // },
 
     empty: {
+        texture: Texture.EMPTY,
         color: "#4d554d",
         description: "Empty",
         satisfies: [],
@@ -108,6 +122,7 @@ export const Needs = {
 } satisfies Record<string, NeedInfo>;
 
 export type IngredientInfo = {
+    texture: Texture;
     color: string;
     description: string;
     satisfies: NeedName[];
