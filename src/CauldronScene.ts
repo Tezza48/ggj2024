@@ -10,8 +10,10 @@ import {
 import { AppContext } from "./AppContext";
 
 import flaskImage from "./flask.png";
-import { Pane } from "tweakpane";
+import { FolderApi, Pane, TextBladeApi } from "tweakpane";
 import gsap from "gsap";
+import { IngredientInfo, Ingredients } from "./Ingredients";
+import { CustomerPane } from "./CustomerPane";
 
 export class CauldronScene extends Container {
     constructor(appContext: AppContext) {
@@ -20,35 +22,36 @@ export class CauldronScene extends Container {
         this.eventMode = "static";
 
         const background = new Sprite(Texture.WHITE);
-        background.tint = "#aa9969";
+        background.tint = "#cfcfcf";
         background.width = appContext.app.view.width;
         background.height = appContext.app.view.height;
         background.setParent(this);
         background.name = "background";
 
-        const center = new Point(background.width / 2, background.height / 2);
+        const cauldronPos = new Point(
+            (2 * background.width) / 3,
+            background.height / 2,
+        );
 
-        const cauldron = new Cauldron();
+        const cauldron = new Cauldron(appContext);
         cauldron.setParent(this);
-        cauldron.position.copyFrom(center);
+        cauldron.position.copyFrom(cauldronPos);
 
-        const sourcePotion = new SourcePotion({ color: "#78ad78" });
-        sourcePotion.position.set(center.x - 150, center.y - 150);
-        sourcePotion.setParent(this);
+        const ctx = {
+            x: 0,
+            y: 0,
+        };
 
-        const sourcePotion1 = new SourcePotion({ color: "#6db6aa" });
-        sourcePotion1.position.set(center.x + 150, center.y - 150);
-        sourcePotion1.setParent(this);
+        const gui = appContext.tweakpane.addFolder({ title: "Mouse" });
 
-        const sourcePotion2 = new SourcePotion({ color: "#ac6d49" });
-        sourcePotion2.position.set(center.x + 150, center.y + 150);
-        sourcePotion2.setParent(this);
+        gui.addBinding(ctx, "x");
+        gui.addBinding(ctx, "y");
 
-        const sourcePotion3 = new SourcePotion({ color: "#6371b1" });
-        sourcePotion3.position.set(center.x - 150, center.y + 150);
-        sourcePotion3.setParent(this);
-
-        let currentDragged: DraggedPotion | undefined = undefined;
+        this.on("pointerdown", (ev: PointerEvent) => {
+            ctx.x = ev.x - cauldron.x;
+            ctx.y = ev.y - cauldron.y;
+            gui.refresh();
+        });
 
         const onStartDragging = (ev: PotionDragEvent) => {
             if (currentDragged) {
@@ -61,16 +64,78 @@ export class CauldronScene extends Container {
             this.on("pointermove", onMove);
             this.once("pointerup", drop);
         };
-        sourcePotion.on("startdragging", onStartDragging);
-        sourcePotion1.on("startdragging", onStartDragging);
-        sourcePotion2.on("startdragging", onStartDragging);
-        sourcePotion3.on("startdragging", onStartDragging);
+
+        const ingredientContainer = new Container();
+        ingredientContainer.setParent(this);
+
+        let i = 0;
+        let wrap = 5;
+        for (const [name, info] of Object.entries(Ingredients)) {
+            const potion = new SourcePotion(info);
+            potion.name = name;
+            potion.position.set(
+                potion.width / 2 + (i % wrap) * potion.width + 15,
+                potion.height / 2 + Math.floor(i / wrap) * potion.height + 5,
+            );
+            potion.setParent(ingredientContainer);
+
+            potion.on("startdragging", onStartDragging);
+            i++;
+        }
+
+        ingredientContainer.y = cauldron.y + 150;
+        ingredientContainer.x = cauldron.x - ingredientContainer.width / 2;
+
+        // const ingredients = [
+        //     {
+        //         ingredient: Ingredients.lime,
+        //         position: new Point(-150, -150),
+        //     },
+        //     {
+        //         ingredient: Ingredients.blueberry,
+        //         position: new Point(-210, -210),
+        //     },
+        //     {
+        //         ingredient: Ingredients.lemon,
+        //         position: new Point(-210, -150),
+        //     },
+        //     {
+        //         ingredient: Ingredients.chocolate,
+        //         position: new Point(-150, -210),
+        //     },
+        //     {
+        //         ingredient: Ingredients.orange,
+        //         position: new Point(+210, -210),
+        //     },
+        //     {
+        //         ingredient: Ingredients.banana,
+        //         position: new Point(+150, -150),
+        //     },
+        //     {
+        //         ingredient: Ingredients.cuddle,
+        //         position: new Point(-150, -150),
+        //     },
+        //     {
+        //         ingredient: Ingredients.cuddle,
+        //         position: new Point(-150, -150),
+        //     },
+        // ] satisfies { ingredient: IngredientInfo; position: Point }[];
+
+        // for (const { position, ingredient } of ingredients) {
+        //     const potion = new SourcePotion(ingredient);
+        //     potion.position.copyFrom(position);
+        //     potion.setParent(ingredientContainer);
+
+        //     potion.on("startdragging", onStartDragging);
+        // }
+
+        // TODO WT: Automatic layout of ingredients.
+
+        let currentDragged: DraggedPotion | undefined = undefined;
 
         const drop = () => {
             if (!currentDragged)
                 throw new Error("Somehow, the dragged thing is undefined");
-
-            console.log("drop");
 
             if (
                 cauldron
@@ -78,7 +143,6 @@ export class CauldronScene extends Container {
                     ?.contains(currentDragged?.x, currentDragged.y)
             ) {
                 cauldron.addIngredient(currentDragged.info);
-                console.log("is over cauldron");
             } else {
                 // TODO Play drop + smash animation.
             }
@@ -91,16 +155,13 @@ export class CauldronScene extends Container {
             currentDragged?.position.set(ev.x, ev.y);
             currentDragged?.momentum(ev.movementX);
         };
+
+        const customerPane = new CustomerPane(appContext);
+        customerPane.height = appContext.app.view.height;
+        customerPane.width = appContext.app.view.width / 3;
+        customerPane.setParent(this);
     }
 }
-
-// class DragManager {}
-
-// class DragArena extends Container {}
-
-type IngredientInfo = {
-    color: ColorSource;
-};
 
 type PotionDragEvent = {
     info: IngredientInfo;
@@ -131,7 +192,7 @@ class SourcePotion extends Container {
         this.setChildIndex(border, 0);
 
         this.on("pointerover", () => {
-            gsap.to(border, { alpha: 1, duration: 0.1 });
+            gsap.to(border, { alpha: 1, duration: 0.05 });
         });
 
         this.on("pointerout", () => {
@@ -148,21 +209,33 @@ class SourcePotion extends Container {
 }
 
 class DraggedPotion extends Container {
+    root: Container;
     sprite: Sprite;
 
     momentumResetTween?: GSAPTween;
+
     constructor(public info: IngredientInfo) {
         super();
 
         const { color } = info;
 
-        const spr = new Sprite(Texture.WHITE);
-        spr.setParent(this);
-        spr.width = 30;
-        spr.height = 100;
-        spr.anchor.set(0.5, 0);
-        spr.tint = color;
-        this.sprite = spr;
+        this.root = new Container();
+        this.root.setParent(this);
+
+        this.sprite = new Sprite(Texture.WHITE);
+        this.sprite.setParent(this.root);
+        this.sprite.width = 30;
+        this.sprite.height = 100;
+        this.sprite.anchor.set(0.5, 0);
+        this.sprite.tint = color;
+
+        const border = new Sprite(Texture.WHITE);
+        border.setParent(this.root);
+        this.root.setChildIndex(border, 0);
+        border.tint = "#94a2bb";
+        border.width = this.sprite.width + 10;
+        border.height = this.sprite.height + 5;
+        border.anchor.set(0.5, 0);
     }
 
     public momentum(value: number) {
@@ -171,20 +244,21 @@ class DraggedPotion extends Container {
             this.momentumResetTween.kill();
         }
 
-        this.momentumResetTween = gsap.to(this.sprite, {
+        this.momentumResetTween = gsap.to(this.root, {
             rotation: 0,
-            duration: Math.abs(this.sprite.rotation),
+            duration: Math.abs(this.root.rotation),
         });
-        this.sprite.rotation = value * scale;
-        console.log(this.rotation);
+        this.root.rotation = value * scale;
     }
 }
 
 class Cauldron extends Container {
+    static MAX_INGREDIENTS = 3;
     ingredients: IngredientInfo[] = [];
 
     liquid: Sprite;
-    constructor() {
+
+    constructor(private appContext: AppContext) {
         super();
 
         const spr = new Sprite(Texture.WHITE);
@@ -207,84 +281,23 @@ class Cauldron extends Container {
     }
 
     addIngredient(info: IngredientInfo) {
-        this.ingredients.push(info);
+        this.ingredients.unshift(info);
+        this.ingredients.splice(3);
 
-        const color = this.ingredients
+        const [r, g, b] = this.ingredients
             .map((i) => i.color)
-            .reduceRight((prev, current) =>
-                gsap.utils.interpolate(prev, current, 0.5),
-            );
+            .map(
+                (c) =>
+                    gsap.utils.splitColor(c, false) as [number, number, number],
+            )
+            .reduceRight(
+                ([pr, pg, pb], [cr, cg, cb]) =>
+                    [pr + cr, pg + cg, pb + cb] as const,
+            )
+            .map((c) => c / this.ingredients.length);
 
-        gsap.to(this.liquid, { tint: color });
+        gsap.to(this.liquid, { tint: `rgb(${r}, ${g}, ${b})` });
+
+        console.log(this.ingredients);
     }
 }
-
-// const flask = new Sprite(Texture.from(flaskImage));
-// flask.anchor.set(0.5, 0.5);
-// flask.eventMode = "static";
-// flask.setParent(this);
-
-// const pane = new Pane();
-
-// const ctx = {
-//     over: false,
-//     drag: false,
-//     x: 0,
-//     y: 0,
-// };
-
-// pane.addBinding(ctx, "over");
-// pane.addBinding(ctx, "drag");
-// pane.addBinding(ctx, "x");
-// pane.addBinding(ctx, "y");
-
-// Ticker.shared.add(() => {
-//     pane.refresh();
-// });
-
-// flask.on("pointerover", () => {
-//     flask.tint = "#ff00ff";
-//     ctx.over = true;
-// });
-
-// flask.on("pointerleave", () => {
-//     flask.tint = "#00ff00";
-//     ctx.over = false;
-// });
-
-// flask.on("pointerdown", () => {
-//     console.log("pointerDown");
-//     if (ctx.over) {
-//         ctx.drag = true;
-//     }
-
-//     this.on("pointermove", onMove);
-
-//     const drop = () => {
-//         console.log("stopdrag");
-//         ctx.drag = false;
-
-//         flask.x = Math.max(
-//             flask.width / 2,
-//             Math.min(background.width - flask.width / 2, flask.x),
-//         );
-//         flask.y = Math.max(
-//             flask.height / 2,
-//             Math.min(background.height - flask.height / 2, flask.y),
-//         );
-//         // flask.y = Math.max(0, Math.min(background.height, flask.y));
-//         this.off("pointermove", onMove);
-//         flask.off("pointerup", drop);
-//         flask.off("pointerupoutside", drop);
-//     };
-//     flask.once("pointerup", drop);
-//     flask.once("pointerupoutside", drop);
-// });
-
-// const onMove = (ev: PointerEvent) => {
-//     if (ctx.drag) {
-//         ctx.x = ev.x;
-//         ctx.y = ev.y;
-//         flask.position.set(ctx.x, ctx.y);
-//     }
-// };
