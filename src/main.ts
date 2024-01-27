@@ -1,7 +1,13 @@
+import gsap from "gsap";
 import { AppContext } from "./AppContext";
-import { CauldronScene } from "./CauldronScene";
+import { Scene } from "./Scene";
 import "./style.css";
 import { Application } from "pixi.js";
+import * as PIXI from "pixi.js";
+import { PixiPlugin } from "gsap/all";
+
+gsap.registerPlugin(PixiPlugin);
+PixiPlugin.registerPIXI(PIXI);
 
 const root = document.querySelector<HTMLDivElement>("#app");
 
@@ -12,5 +18,5 @@ root?.appendChild(application.renderer.view as HTMLCanvasElement);
 
 const appContext = new AppContext(application);
 
-const scene = new CauldronScene(appContext);
+const scene = new Scene(appContext);
 application.stage.addChild(scene);

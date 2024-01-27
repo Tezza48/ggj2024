@@ -1,7 +1,9 @@
+import gsap from "gsap";
+
 export const Ingredients = {
     lime: {
         color: "#00ff00",
-        description: "",
+        description: "Lime",
         satisfies: ["sour", "green"],
     },
     blueberry: {
@@ -11,35 +13,79 @@ export const Ingredients = {
     },
     lemon: {
         color: "#e1ec77",
-        description: "",
+        description: "Lemon",
         satisfies: ["sour", "yellow"],
     },
     chocolate: {
         color: "#614229",
-        description: "",
+        description: "Chocolate",
         satisfies: ["sweet", "cosy"],
     },
     orange: {
         color: "#ffae00",
-        description: "",
+        description: "Orange",
         satisfies: ["sweet", "orange"],
     },
     banana: {
         color: "#eeff00",
-        description: "",
+        description: "Banana",
         satisfies: ["sweet", "yellow"],
     },
     cuddle: {
         color: "#d63975",
         description: "Cuddle",
-        satisfies: ["cosy"],
+        satisfies: ["cosy", "pink"],
     },
     lake: {
         color: "#00e1ff",
         description: "Lake",
-        satisfies: ["blue", "shiny"],
+        satisfies: ["blue", "shiny", "cold"],
+    },
+    goth: {
+        color: "#1e1e1e",
+        description: "Goth",
+        satisfies: ["black", "pink"],
+    },
+    bubble: {
+        color: "#ffffff",
+        description: "Bubble",
+        satisfies: ["fizz"],
+    },
+    pepper: {
+        color: "#ff00ff",
+        description: "Pepper",
+        satisfies: ["hot", "red"],
+    },
+    liquorice: {
+        color: "#000000",
+        description: "Liquorice",
+        satisfies: ["black", "sweet"],
+    },
+    glitter: {
+        color: "#b4e4ec",
+        description: "Glitter",
+        satisfies: ["shiny", "fizz"],
+    },
+
+    empty: {
+        color: "#4d554d",
+        description: "Empty",
+        satisfies: [],
     },
 } satisfies Record<string, IngredientInfo>;
+
+export function mixIngredientColors(ingredients: IngredientInfo[]) {
+    const [r, g, b] = ingredients
+        .map((i) => i.color)
+        .map((c) => gsap.utils.splitColor(c, false) as [number, number, number])
+        .reduceRight(
+            ([pr, pg, pb], [cr, cg, cb]) =>
+                [pr + cr, pg + cg, pb + cb] as const,
+        )
+        .map((c) => c / ingredients.length);
+
+    return `rgb(${r}, ${g}, ${b})`;
+}
 
 export const Needs = {
     sweet: { description: "Sweet" },
@@ -66,6 +112,7 @@ export type IngredientInfo = {
     description: string;
     satisfies: NeedName[];
 };
+
 export type NeedInfo = { description: string };
 
 // export type IngredientName = keyof typeof Ingredients;
