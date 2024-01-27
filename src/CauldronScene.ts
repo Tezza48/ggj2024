@@ -32,13 +32,25 @@ export class CauldronScene extends Container {
         cauldron.setParent(this);
         cauldron.position.copyFrom(center);
 
-        const sourcePotion = new SourcePotion({ color: "#00ff00" });
+        const sourcePotion = new SourcePotion({ color: "#78ad78" });
         sourcePotion.position.set(center.x - 150, center.y - 150);
         sourcePotion.setParent(this);
 
+        const sourcePotion1 = new SourcePotion({ color: "#6db6aa" });
+        sourcePotion1.position.set(center.x + 150, center.y - 150);
+        sourcePotion1.setParent(this);
+
+        const sourcePotion2 = new SourcePotion({ color: "#ac6d49" });
+        sourcePotion2.position.set(center.x + 150, center.y + 150);
+        sourcePotion2.setParent(this);
+
+        const sourcePotion3 = new SourcePotion({ color: "#6371b1" });
+        sourcePotion3.position.set(center.x - 150, center.y + 150);
+        sourcePotion3.setParent(this);
+
         let currentDragged: DraggedPotion | undefined = undefined;
 
-        sourcePotion.on("startdragging", (ev: PotionDragEvent) => {
+        const onStartDragging = (ev: PotionDragEvent) => {
             if (currentDragged) {
                 currentDragged.destroy();
             }
@@ -48,7 +60,11 @@ export class CauldronScene extends Container {
 
             this.on("pointermove", onMove);
             this.once("pointerup", drop);
-        });
+        };
+        sourcePotion.on("startdragging", onStartDragging);
+        sourcePotion1.on("startdragging", onStartDragging);
+        sourcePotion2.on("startdragging", onStartDragging);
+        sourcePotion3.on("startdragging", onStartDragging);
 
         const drop = () => {
             if (!currentDragged)
@@ -57,11 +73,18 @@ export class CauldronScene extends Container {
             console.log("drop");
 
             if (
-                cauldron.hitArea?.contains(currentDragged?.x, currentDragged.y)
+                cauldron
+                    .getBounds()
+                    ?.contains(currentDragged?.x, currentDragged.y)
             ) {
-                this.off("pointermove", onMove);
                 cauldron.addIngredient(currentDragged.info);
+                console.log("is over cauldron");
+            } else {
+                // TODO Play drop + smash animation.
             }
+
+            currentDragged.destroy();
+            this.off("pointermove", onMove);
         };
 
         const onMove = (ev: PointerEvent) => {
@@ -191,7 +214,8 @@ class Cauldron extends Container {
             .reduceRight((prev, current) =>
                 gsap.utils.interpolate(prev, current, 0.5),
             );
-        this.liquid.tint = color;
+
+        gsap.to(this.liquid, { tint: color });
     }
 }
 
