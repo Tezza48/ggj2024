@@ -6,8 +6,6 @@ import { Application } from "pixi.js";
 import * as PIXI from "pixi.js";
 import { PixiPlugin } from "gsap/all";
 import { Sound } from "@pixi/sound";
-import backgroundChatterSound from "./assets/background_chatter.opus";
-import bubblesSound from "./assets/bubbles.opus";
 
 gsap.registerPlugin(PixiPlugin);
 PixiPlugin.registerPIXI(PIXI);
@@ -17,12 +15,12 @@ const root = document.querySelector<HTMLDivElement>("#app");
 const application = new Application({ resizeTo: window, autoStart: true });
 root?.appendChild(application.renderer.view as HTMLCanvasElement);
 
-const background = Sound.from(backgroundChatterSound);
+const background = Sound.from("./assets/background_chatter.opus");
 background.loop = true;
 background.play();
 background.volume = 1;
 
-const bubbles = Sound.from(bubblesSound);
+const bubbles = Sound.from("./assets/bubbles.opus");
 bubbles.loop = true;
 bubbles.play();
 bubbles.volume = 0.3;

@@ -6,8 +6,6 @@ import {
     Ingredients,
     mixIngredientColors,
 } from "./Ingredients";
-import cauldronPng from "./assets/cauldron.png";
-import cauldronLiquidPng from "./assets/cauldron_liquid.png";
 import { PotionDragEvent } from "./DragEvent";
 
 export class Cauldron extends Container {
@@ -16,23 +14,19 @@ export class Cauldron extends Container {
 
     liquid: Sprite;
 
-    constructor(private appContext: AppContext) {
+    constructor(public appContext: AppContext) {
         super();
 
         this.eventMode = "static";
 
-        const spr = new Sprite(Texture.from(cauldronPng));
+        const spr = new Sprite(Texture.from("./assets/cauldron.png"));
         spr.setParent(this);
         spr.anchor.set(0.5);
 
-        this.liquid = new Sprite(Texture.from(cauldronLiquidPng));
+        this.liquid = new Sprite(Texture.from("./assets/cauldron_liquid.png"));
         this.liquid.setParent(this);
         this.liquid.anchor.set(0.5);
         this.liquid.tint = "#466159";
-
-        const text = new Text("Cauldron", { fill: "#d1d1d1" });
-        text.setParent(this);
-        text.anchor.set(0.5);
 
         this.on("pointerdown", (ev: PointerEvent) => {
             this.emit("startdragging", {

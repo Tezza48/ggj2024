@@ -1,19 +1,13 @@
-import { Container, Graphics, Rectangle, Sprite, Text, Texture } from "pixi.js";
+import { Container, Graphics, Sprite, Text, Texture } from "pixi.js";
 import { AppContext } from "./AppContext";
-import {
-    IngredientInfo,
-    Ingredients,
-    NeedInfo,
-    NeedName,
-    Needs,
-} from "./Ingredients";
+import { IngredientInfo, NeedName, Needs } from "./Ingredients";
 import gsap from "gsap";
 import { Character, Characters } from "./Characters";
 
 export class CustomerPane extends Container {
     private background: Sprite;
     private countertop: Sprite;
-    private thoughtBubble: Container;
+    private thoughtBubble: Sprite;
     public customer: Customer;
     public thought: Text;
 
@@ -31,26 +25,35 @@ export class CustomerPane extends Container {
         this.background.setParent(this);
 
         this.customer = new Customer();
-        this.customer.setCharacter(Characters[0]);
+        this.customer.setCharacter(
+            typeof Characters[0] === "function"
+                ? Characters[0]()
+                : Characters[0],
+        );
         this.customer.setParent(this);
 
-        this.thoughtBubble = new Container();
+        this.thoughtBubble = new Sprite(
+            Texture.from("./assets/thought_bubble.png"),
+        );
         this.thoughtBubble.setParent(this);
+        this.thoughtBubble.anchor.set(0.5, 0.3);
 
-        const bubble = new Sprite(Texture.WHITE);
-        bubble.alpha = 0.8;
-        bubble.width = 300;
-        bubble.height = 200;
-        bubble.anchor.set(0.5);
-        bubble.setParent(this.thoughtBubble);
+        // const bubble = new Sprite(Texture.WHITE);
+        // bubble.alpha = 0.8;
+        // bubble.width = 300;
+        // bubble.height = 200;
+        // bubble.anchor.set(0.5);
+        // bubble.setParent(this.thoughtBubble);
 
         this.thought = new Text(
-            this.customer.needs.map((n) => Needs[n].description).join("\n"),
+            `I need...\n${this.customer.needs
+                .map((n) => Needs[n].description)
+                .join("\n")}`,
         );
         this.thought.setParent(this.thoughtBubble);
         this.thought.anchor.set(0.5);
 
-        this.countertop = new Sprite(Texture.WHITE);
+        this.countertop = new Sprite(Texture.from("./assets/wood.png"));
         this.countertop.tint = "#8f795f";
         this.countertop.setParent(this);
 
@@ -84,12 +87,17 @@ export class CustomerPane extends Container {
                 duration: 1,
             })
             .add(() => {
-                this.currentCustomer =
-                    (this.currentCustomer + 1) % Characters.length;
-                this.customer.setCharacter(Characters[this.currentCustomer]);
-                this.thought.text = this.customer.needs
+                this.currentCustomer = Math.min(
+                    this.currentCustomer + 1,
+                    Characters.length - 1,
+                );
+                const character = Characters[this.currentCustomer];
+                this.customer.setCharacter(
+                    typeof character === "function" ? character() : character,
+                );
+                this.thought.text = `I need...\n${this.customer.needs
                     .map((n) => Needs[n].description)
-                    .join("\n");
+                    .join("\n")}`;
             })
             .set(this.customer, {
                 pixi: {
@@ -132,7 +140,7 @@ export class CustomerPane extends Container {
 
         this.thoughtBubble.position.set(
             this.background.width / 2,
-            this.background.height / 6,
+            this.background.height / 6 - 50,
         );
     }
 }

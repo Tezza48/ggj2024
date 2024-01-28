@@ -1,54 +1,49 @@
 import gsap from "gsap";
-import bananaPng from "./assets/fruits/banana.png";
-import blueberryPng from "./assets/fruits/black_cherry.png";
-import lemonPng from "./assets/fruits/lemon.png";
-import limePng from "./assets/fruits/lime.png";
-import orangePng from "./assets/fruits/orange.png";
-import chocolatePng from "./assets/chocolate.png";
 import { Texture } from "pixi.js";
 
 export const Ingredients = {
     lime: {
-        texture: Texture.from(limePng),
+        texture: Texture.from("./assets/fruits/lime.png"),
         color: "#00ff00",
         description: "Lime",
         satisfies: ["sour", "green"],
     },
     blueberry: {
-        texture: Texture.from(blueberryPng),
+        texture: Texture.from("./assets/fruits/black_cherry.png"),
         color: "#4327e4",
         description: "Blueberry",
         satisfies: ["sweet", "sour", "blue"],
     },
     lemon: {
-        texture: Texture.from(lemonPng),
+        texture: Texture.from("./assets/fruits/lemon.png"),
         color: "#e1ec77",
         description: "Lemon",
         satisfies: ["sour", "yellow"],
     },
     chocolate: {
-        texture: Texture.from(chocolatePng),
+        texture: Texture.from("./assets/chocolate.png"),
         color: "#614229",
         description: "Chocolate",
         satisfies: ["sweet", "cosy"],
     },
     orange: {
-        texture: Texture.from(orangePng),
+        texture: Texture.from("./assets/fruits/orange.png"),
         color: "#ffae00",
         description: "Orange",
         satisfies: ["sweet", "orange"],
     },
     banana: {
-        texture: Texture.from(bananaPng),
+        texture: Texture.from("./assets/fruits/banana.png"),
         color: "#eeff00",
         description: "Banana",
         satisfies: ["sweet", "yellow"],
     },
-    // cuddle: {
-    //     color: "#d63975",
-    //     description: "Cuddle",
-    //     satisfies: ["cosy", "pink"],
-    // },
+    cuddle: {
+        texture: Texture.from("./assets/teddy.png"),
+        color: "#d63975",
+        description: "Cuddle",
+        satisfies: ["cosy", "pink"],
+    },
     // lake: {
     //     color: "#00e1ff",
     //     description: "Lake",
@@ -86,7 +81,7 @@ export const Ingredients = {
         description: "Empty",
         satisfies: [],
     },
-} satisfies Record<string, IngredientInfo>;
+} as Record<string, IngredientInfo>;
 
 export function mixIngredientColors(ingredients: IngredientInfo[]) {
     const [r, g, b] = ingredients

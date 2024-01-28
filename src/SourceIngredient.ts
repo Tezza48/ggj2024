@@ -1,4 +1,4 @@
-import { Container, Rectangle, Sprite, Texture } from "pixi.js";
+import { Container, Rectangle, Sprite } from "pixi.js";
 import gsap from "gsap";
 import { IngredientInfo } from "./Ingredients";
 import { IngredientDragEvent } from "./DragEvent";
@@ -6,8 +6,6 @@ import { IngredientDragEvent } from "./DragEvent";
 export class SourceIngredient extends Container {
     constructor(public info: IngredientInfo) {
         super();
-
-        const { color } = info;
 
         this.eventMode = "static";
         this.hitArea = new Rectangle(-50, -50, 100, 100);

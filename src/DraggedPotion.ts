@@ -1,7 +1,6 @@
 import { Container, Sprite, Texture } from "pixi.js";
 import gsap from "gsap";
 import { IngredientInfo, mixIngredientColors } from "./Ingredients";
-import flaskPng from "./assets/flask.png";
 
 export class DraggedPotion extends Container {
     root: Container;
@@ -16,7 +15,7 @@ export class DraggedPotion extends Container {
         this.root = new Container();
         this.root.setParent(this);
 
-        this.sprite = new Sprite(Texture.from(flaskPng));
+        this.sprite = new Sprite(Texture.from("./assets/flask.png"));
         this.sprite.setParent(this.root);
         this.sprite.anchor.set(0.5, 0);
         this.sprite.y -= 20;

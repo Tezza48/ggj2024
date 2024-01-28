@@ -8,7 +8,6 @@ import { DraggedIngredient } from "./DraggedIngredient";
 import { Cauldron } from "./Cauldron";
 import { DraggedPotion } from "./DraggedPotion";
 import { PotionDragEvent, IngredientDragEvent } from "./DragEvent";
-import granitePng from "./assets/granite.png";
 
 export class Scene extends Container {
     constructor(appContext: AppContext) {
@@ -20,7 +19,7 @@ export class Scene extends Container {
         mainContainer.setParent(this);
         mainContainer.x = appContext.app.view.width / 3;
 
-        const background = new Sprite(Texture.from(granitePng));
+        const background = new Sprite(Texture.from("./assets/granite.png"));
         background.tint = "#ffffff";
         background.height = appContext.app.view.height;
         background.scale.x = background.scale.x;
