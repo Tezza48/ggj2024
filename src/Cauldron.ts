@@ -1,4 +1,4 @@
-import { Container, Sprite, Text, Texture } from "pixi.js";
+import { Container, Sprite, Texture } from "pixi.js";
 import { AppContext } from "./AppContext";
 import gsap from "gsap";
 import {
