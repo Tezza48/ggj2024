@@ -8,12 +8,11 @@ export class SourceIngredient extends Container {
         super();
 
         this.eventMode = "static";
-        this.hitArea = new Rectangle(-50, -50, 100, 100);
+        this.hitArea = new Rectangle(0, 0, 100, 100);
 
         const spr = new Sprite(info.texture);
-        spr.anchor.set(0.5);
         spr.width = spr.height = 100;
-        spr.scale.set(spr.scale.x);
+        spr.scale.set(spr.scale.x, spr.scale.y);
         spr.setParent(this);
 
         this.on("pointerover", () => {

@@ -1,0 +1,7 @@
+# Potion Cafe
+
+Other things from Opengameart.com
+
+<p class="attribution">"<a target="_blank" rel="noopener noreferrer" href="https://commons.wikimedia.org/w/index.php?curid=17167233">Unwound liquorice wire</a>" by <a target="_blank" rel="noopener noreferrer" href="https://www.flickr.com/people/17425845@N00">Windell Oskay</a> is licensed under <a target="_blank" rel="noopener noreferrer" href="https://creativecommons.org/licenses/by/2.0/?ref=openverse">CC BY 2.0 <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" style="height: 1em; margin-right: 0.125em; display: inline;"></img><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" style="height: 1em; margin-right: 0.125em; display: inline;"></img></a>. </p>
+
+<p class="attribution">"<a target="_blank" rel="noopener noreferrer" href="https://www.flickr.com/photos/44124450890@N01/502949270">Glitter</a>" by <a target="_blank" rel="noopener noreferrer" href="https://www.flickr.com/photos/44124450890@N01">gregveen</a> is licensed under <a target="_blank" rel="noopener noreferrer" href="https://creativecommons.org/licenses/by-sa/2.0/?ref=openverse">CC BY-SA 2.0 <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" style="height: 1em; margin-right: 0.125em; display: inline;"></img><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" style="height: 1em; margin-right: 0.125em; display: inline;"></img><img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" style="height: 1em; margin-right: 0.125em; display: inline;"></img></a>. </p>

@@ -1,4 +1,4 @@
-import { Container, Sprite, Texture } from "pixi.js";
+import { Container, Rectangle, Sprite, Texture } from "pixi.js";
 import { AppContext } from "./AppContext";
 import gsap from "gsap";
 import {
@@ -19,12 +19,15 @@ export class Cauldron extends Container {
 
         this.eventMode = "static";
 
+        const container = new Container();
+        container.setParent(this);
+
         const spr = new Sprite(Texture.from("./assets/cauldron.png"));
-        spr.setParent(this);
+        spr.setParent(container);
         spr.anchor.set(0.5);
 
         this.liquid = new Sprite(Texture.from("./assets/cauldron_liquid.png"));
-        this.liquid.setParent(this);
+        this.liquid.setParent(container);
         this.liquid.anchor.set(0.5);
         this.liquid.tint = "#466159";
 
@@ -36,6 +39,14 @@ export class Cauldron extends Container {
         });
 
         this.addIngredient(Ingredients.empty);
+
+        this.on("pointerover", () => {
+            gsap.to(container, { pixi: { y: -10 }, duration: 0.05 });
+        });
+
+        this.on("pointerout", () => {
+            gsap.to(container, { pixi: { y: 0 }, duration: 0.1 });
+        });
     }
 
     addIngredient(info: IngredientInfo) {
@@ -45,7 +56,5 @@ export class Cauldron extends Container {
         const color = mixIngredientColors(this.ingredients);
 
         gsap.to(this.liquid, { tint: color });
-
-        console.log(this.ingredients.map((i) => i.description));
     }
 }

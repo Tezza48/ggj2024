@@ -64,16 +64,18 @@ export const Ingredients = {
     //     description: "Pepper",
     //     satisfies: ["hot", "red"],
     // },
-    // liquorice: {
-    //     color: "#000000",
-    //     description: "Liquorice",
-    //     satisfies: ["black", "sweet"],
-    // },
-    // glitter: {
-    //     color: "#b4e4ec",
-    //     description: "Glitter",
-    //     satisfies: ["shiny", "fizz"],
-    // },
+    liquorice: {
+        texture: Texture.from("./assets/liquorice.png"),
+        color: "#000000",
+        description: "Liquorice",
+        satisfies: ["black", "sweet"],
+    },
+    glitter: {
+        texture: Texture.from("./assets/glitter.png"),
+        color: "#b4e4ec",
+        description: "Glitter",
+        satisfies: ["shiny"],
+    },
 
     empty: {
         texture: Texture.EMPTY,
@@ -101,7 +103,7 @@ export const Needs = {
     sour: { description: "Sour" },
     fizz: { description: "Fizz" },
     drama: { description: "Drama" },
-    cosy: { description: "Cosy" },
+    cosy: { description: "Cute" },
     hot: { description: "Hot" },
     cold: { description: "Cold" },
     shiny: { description: "Shiny" },

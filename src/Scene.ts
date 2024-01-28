@@ -101,9 +101,10 @@ export class Scene extends Container {
             if (info == Ingredients.empty) continue;
 
             const ingredient = new SourceIngredient(info);
+            console.log(name);
             ingredient.name = name;
             ingredient.position.set(
-                ingredient.width / 2 + (i % wrap) * ingredient.width - 25 * i,
+                (i % wrap) * ingredient.width,
                 ingredient.height / 2 +
                     Math.floor(i / wrap) * ingredient.height +
                     5,
@@ -114,7 +115,7 @@ export class Scene extends Container {
             i++;
         }
 
-        ingredientContainer.y = cauldron.y + 250;
+        ingredientContainer.y = cauldron.y + 150;
         ingredientContainer.x = cauldron.x - ingredientContainer.width / 2;
 
         let currentIngredient: DraggedIngredient | undefined = undefined;

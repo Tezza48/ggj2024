@@ -10,7 +10,6 @@ export class DraggedPotion extends Container {
 
     constructor(public ingredients: IngredientInfo[]) {
         super();
-        console.log(ingredients.map((i) => i.color));
 
         this.root = new Container();
         this.root.setParent(this);
